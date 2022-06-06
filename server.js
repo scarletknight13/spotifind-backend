@@ -7,7 +7,7 @@ const {PORT = 4000} = process.env;
 const cors = require('cors');
 const morgan = require('morgan');
 const controllers = require('./controllers');
-
+const socket = require('socket.io')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -22,4 +22,23 @@ app.get('/', (req, res)=>{
 })
 
 app.listen(PORT, ()=>console.log("You're listening on port " + PORT))
+// const io = socket(server, {
+//     cors : {
+//         origin : 'http://localhost:4000',
+//         credentials: true,
+//     },
+// })
+// global.onlineUsers = new Map()
+// io.on('connection', (socket) => {
+//     global.chatSoket = socket;
+//     socket.on('add-user', (userId) => {
+//         conlineUsers.set(userId, socket.id);
+//     })
+//     socket.on('send-msg', (data) => {
+//         const sendUserSocket = onlineUsers.get(data.to);
+//         if(sendUserSocket){
+//             socket,to(sendUserSocket).emit('msg-recieve', data.msg);
+//         }
+//     });
+// }); 
 

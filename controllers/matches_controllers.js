@@ -54,11 +54,13 @@ router.get('/getmatches/:id', (req, res) => {
             for(let j of i.messages){
                 newMessages.push({recipient: j.recipient.username, sender: j.sender.username, content: j.content,})
             }
-            newData.push({id : i._id, user1 : i.user1.username, user2 : i.user2.username, messages : newMessages})
+            newData.push({id : i._id, user1 : {username: i.user1.username, profilePic : i.user1.profilePic}, user2 : {username: i.user2.username, profilePic : i.user2.profilePic}, messages : newMessages})
        }
        res.json(newData); 
     })
-    .catch(err => res.status(400).json(err))
+    .catch(err => {
+        console.log(err);
+        res.status(400).json(err)})
 })
 router.post('/new', async (req, res) => {
     try {
