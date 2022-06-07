@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const PlaylistSchema = new mongoose.Schema({
     data: [{
-        type: String,
+        type: Object,
     }]
 },
     {timestamps: true}

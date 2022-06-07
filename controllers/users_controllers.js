@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require('../models');
 const { User } = require('../models');
+const { findById, findByIdAndUpdate } = require('../models/Message');
 
 
  router.get('/', async (req, res) => {
@@ -55,6 +56,13 @@ router.post("/login", async (req,res) => {
         res.status.json(error);
       }
 })
-
+router.post('/update', async (req, res) => {
+    try {
+      const user = findByIdAndUpdate(req.body.id, req.body);
+      res.json({message: 'Success'});
+    } catch (error) {
+      res.json({message: 'Failed to update user', error : error});
+    }
+})
 
 module.exports = router;
