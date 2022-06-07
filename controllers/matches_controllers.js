@@ -82,5 +82,14 @@ router.post('/new', async (req, res) => {
     }
    
 })
-
+router.get('/isMatch', async (req, res) => {
+    try {
+        const likedUser = await db.User.findById(req.body.likedUser);
+        const found = likedUser.likes.find(element => element === currentUserId);
+        res.json(found !== undefined);
+    } 
+    catch (error) {
+        
+    }
+})
 module.exports = router;

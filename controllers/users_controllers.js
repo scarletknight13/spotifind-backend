@@ -8,8 +8,10 @@ const { User } = require('../models');
 
  router.get('/', async (req, res) => {
     try {
-        res.send('users');
+        const users = await db.User.find({}).select(['email', 'username', 'profilePic']);
+        res.json(users);
     } catch (error) {
+        console.error(error);
         res.status(400).json(error);
     }
 })

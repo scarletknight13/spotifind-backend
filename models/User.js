@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     },
     likes : [{
         type: mongoose.Types.ObjectId,
-        ref: 'Like'
+        ref: 'User'
     }],
     matches : [{
         type: mongoose.Types.ObjectId,
