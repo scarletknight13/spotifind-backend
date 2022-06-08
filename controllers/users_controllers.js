@@ -7,16 +7,15 @@ const { User } = require('../models');
 const { findById, findByIdAndUpdate } = require('../models/Message');
 
 
- router.get('/', async (req, res) => {
-    try {
-        const users = await db.User.find({}).select(['email', 'username', 'profilePic']);
-        res.json(users);
-    } catch (error) {
-        console.error(error);
-        res.status(400).json(error);
-    }
+router.get('/', async (req, res) => {
+  try {
+      const users = await db.User.find({}).select(['email', 'username', 'profilePic', 'playlist', 'age', 'gender']);
+      res.json(users);
+  } catch (error) {
+      console.error(error);
+      res.status(400).json(error);
+  }
 })
-
  router.post('/register', async (req, res) => {
     try {
         const { username, email, password, name } = req.body;
@@ -32,6 +31,8 @@ const { findById, findByIdAndUpdate } = require('../models/Message');
           email,
           username,
           password: hashedPassword,
+          age: 19,
+          gender: 'Man',
         });
         delete user.password;
         return res.json({ status: true, user });

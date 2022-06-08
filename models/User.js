@@ -29,7 +29,6 @@ const UserSchema = new mongoose.Schema({
     },
     bio: {
         type: String,
-        required: 'required'
     },
     gender: {
         type: String,
@@ -47,8 +46,7 @@ const UserSchema = new mongoose.Schema({
         ref: 'Match'
     }],
     playlist: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Playlist'
+        type: Object,
     }]
 },
     {
