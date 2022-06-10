@@ -17,6 +17,7 @@ app.use('/users', controllers.users);
 app.use('/messages', controllers.messages);
 app.use('/matches', controllers.matches);
 app.use('/playlists', controllers.playlists);
+app.use('/likes', controllers.likes);
 app.get('/', (req, res)=>{
     res.send('helloworld');
 })

@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require('../models');
 const { User } = require('../models');
-const { findById, findByIdAndUpdate } = require('../models/Message');
 
 
 router.post('/register', async (req, res) => {
@@ -58,6 +57,9 @@ router.put('/update', async (req, res) => {
       res.json({message: 'Failed to update user', error : error});
     }
 })
+router.post('/addtolikes', (req, res) => {
+    
+})
 router.get('/:id', async (req, res) => {
   try {
       console.log(req.params.id);
@@ -65,7 +67,6 @@ router.get('/:id', async (req, res) => {
       const users = await db.User.find({_id : {$ne: req.params.id}}).select(['email', 'username', 'profilePic', 'playlist', 'age', 'gender']);
       const usersCopy = [...users];
       const seen = {};
-      console.log(currentUser);
       for(let i of currentUser.playlist){
         seen[i.artist + i.name] = 1;
       }

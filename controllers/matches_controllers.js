@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const db = require('../models');
 const { Match } = require('../models');
 const { populate } = require('../models/Message');
+const mongoose = require('mongoose');
 
 
 router.get('/', async (req, res) => {
@@ -97,7 +98,10 @@ router.post('/new', async (req, res) => {
 router.get('/isMatch', async (req, res) => {
     try {
         const likedUser = await db.User.findById(req.body.likedUser);
-        const found = likedUser.likes.find(element => element === currentUserId);
+        console.log(req.body)
+        const found = likedUser.likes.find(element => element.toString() == req.body.currentUserId.toString()
+        );
+        console.log(found);
         res.json({response: found !== undefined});
     } 
     catch (error) {
