@@ -14,6 +14,18 @@ router.get('/', async (req, res) => {
         res.status(400).json(error);
     }
 })
+router.delete('/:id', async (req, res) => {
+    try {
+        const user = await db.User.findById(req.body.userId);
+        const matches = user.matches;
+        const newMaatches = matches.filter(match => match != req.params.id);
+        await db.Match.findByIdAndDelete(req.params.id);
+        await db.User.findByIdAndUpdate(req.body.userId, {matches: newMaatches});          
+    } 
+    catch (error) {
+        res.status(400).json(error);
+    }
+})
 router.get('/getmatches/:id', (req, res) => {
     db.User
     .findOne({_id: req.params.id })
@@ -64,7 +76,7 @@ router.get('/getmatches/:id', (req, res) => {
 })
 router.post('/new', async (req, res) => {
     try {
-        const user1 = await db.User.findOne({username: req.body.user1 }).populate('matches')
+        const user1 = await db.User.findOne({username: req.body.user1 }).populate('matches');
         const user2 = await db.User.findOne({username: req.body.user2 }).populate('matches');
         const user1PastMatches = user1.matches
         const user2PastMatches = user2.matches
@@ -86,10 +98,10 @@ router.get('/isMatch', async (req, res) => {
     try {
         const likedUser = await db.User.findById(req.body.likedUser);
         const found = likedUser.likes.find(element => element === currentUserId);
-        res.json(found !== undefined);
+        res.json({response: found !== undefined});
     } 
     catch (error) {
-        
+        res.status(400).json(error);
     }
 })
 module.exports = router;
