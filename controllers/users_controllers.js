@@ -49,7 +49,6 @@ router.post("/login", async (req,res) => {
 })
 router.put('/update', async (req, res) => {
   try {
-    console.log(req.body);
       const user = await db.User.findByIdAndUpdate(req.body.id, req.body);
       res.json({message: 'Success'});
     } catch (error) {
@@ -62,7 +61,7 @@ router.get('/:id', async (req, res) => {
   try {
       console.log(req.params.id);
       const currentUser = await db.User.findById(req.params.id);
-      const users = await db.User.find({_id : {$ne: req.params.id}}).select(['email', 'username', 'profilePic', 'playlist', 'age', 'gender']);
+      const users = await db.User.find({_id : {$ne: req.params.id}}).select(['email', 'username', 'profilePic', 'playlist', 'age', 'gender', 'bio']);
       const usersCopy = [...users];
       const seen = {};
       for(let i of currentUser.playlist){

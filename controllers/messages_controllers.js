@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
 })
 router.post('/new', async (req, res) => {
     try {
+        console.log(req.body);
         const sender = await db.User.findOne({username: req.body.sender})
         const recipient = await db.User.findOne({username: req.body.recipient});
         req.body.sender = sender._id

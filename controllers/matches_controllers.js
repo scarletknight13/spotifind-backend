@@ -81,38 +81,34 @@ router.get('/getmatches/:id', (req, res) => {
         console.log(err);
         res.status(400).json(err)})
 })
-
-router.put('/isMatch', async (req, res) => {
-    // try {
-    //     const likedUser = await db.User.findOne({username: req.body.likedUser});
-    //     const currentUser = await db.User.findOne({username: req.body.currentUser});
-    //     let flag = false;
-    //     // for(let i = 0; i < likedUserLikes.length; i++) {
-    //     //     console.log(typeof likedUserLikes[i], typeof currentUser._id)
-    //     //     if(currentUser._id.toString() == likedUserLikes[i].toString() ){
-    //     //         flag = true;
-    //     //     }
-    //     // }
-    //     if(flag){
-    //         const user1PastMatches = likedUser.matches
-    //         const user2PastMatches = currentUser.matches
-    //         const match = {
-    //             user1: likedUser._id,
-    //             user2: currentUser._id
-    //         }
-    //         const newMatch = await db.Match.create(match);
-    //         await db.User.findByIdAndUpdate(likedUser._id, {matches: [...user1PastMatches, newMatch._id]});
-    //         await db.User.findByIdAndUpdate(currentUser._id, {matches: [...user2PastMatches, newMatch._id]});
-    //     }
+router.get('/isMatch/:likedUser/:currentUser', async (req, res) => {
     try {
-        res.json({success : true});;
-    } catch (error) {
+        const likedUser = await db.User.findOne({username: req.params.likedUser});
+        const currentUser = await db.User.findOne({username: req.params.currentUser});
+        const likedUserLikes = likedUser.likes;
+        let flag = false;
+        for(let i = 0; i < likedUserLikes.length; i++) {
+            if(currentUser._id.toString() == likedUserLikes[i].toString() ){
+                flag = true;
+            }
+        }
+        
+        if(flag){
+            const user1PastMatches = likedUser.matches
+            const user2PastMatches = currentUser.matches
+            const match = {
+                user1: likedUser._id,
+                user2: currentUser._id
+            }
+            const newMatch = await db.Match.create(match);
+            await db.User.findByIdAndUpdate(likedUser._id, {matches: [...user1PastMatches, newMatch._id]});
+            await db.User.findByIdAndUpdate(currentUser._id, {matches: [...user2PastMatches, newMatch._id]});
+        }
+        res.json({reply: flag})
+    } 
+    catch (error) {
+        console.log(error);
         res.status(400).json(error);
     }
-    // } 
-    // catch (error) {
-    //     console.log(error);
-    //     res.status(400).json(error);
-    // }
 })
 module.exports = router;
