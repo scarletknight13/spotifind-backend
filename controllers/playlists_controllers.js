@@ -26,7 +26,7 @@ router.put('/add', async (req, res) => {
         res.json({message: 'Success'});
     } 
     catch (error) {
-        res.json({message: 'Success', error : error}); 
+        res.json({message: 'Failed', error : error}); 
     }
 })
 module.exports = router;
