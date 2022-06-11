@@ -17,11 +17,8 @@ router.get('/', async (req, res) => {
 router.put('/add', async (req, res) => {
     try {
         const user = await db.User.findById(req.body._id);
-        const playlist = user.playlist;
-        const newPlaylist = [...req.body.playlist]
-        if(playlist !== undefined){
-            newPlaylist.push(...playlist);
-        }
+        const newPlaylist = [...req.body.playlist];
+        console.log(newPlaylist, req.body._id);
         await db.User.findByIdAndUpdate(req.body._id, {playlist: newPlaylist});
         res.json({message: 'Success'});
     } 
