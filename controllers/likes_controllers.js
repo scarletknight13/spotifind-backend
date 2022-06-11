@@ -4,11 +4,13 @@ const db = require('../models');
 const mongoose = require('mongoose');
 router.put('/add', async (req, res) => {
     try {
-        const user = await db.User.findById(req.body.userId);
+        console.log(req.body);
+        const user = await db.User.findOne({username: req.body.user});
+        const likedUser = await db.User.findOne({username: req.body.likedUser})
         const likes = user.likes;
-        const newLikes = [...likes, mongoose.Types.ObjectId(req.body.likedUserId)];
-        console.log(newLikes);
-        await db.User.findByIdAndUpdate(req.body.userId, {likes: newLikes});
+        const newLikes = [...likes, likedUser._id];
+        user.likes = newLikes;
+        user.save();
         res.json({message: 'Success'});
     } 
     catch (error) {

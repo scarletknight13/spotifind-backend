@@ -25,7 +25,8 @@ app.get('/', (req, res)=>{
 const server = app.listen(PORT, ()=>console.log("You're listening on port " + PORT))
 const io = socket(server, {
     cors : {
-        origin : 'http://localhost:4000',
+        origin : 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
     },
 })
@@ -33,7 +34,7 @@ global.onlineUsers = new Map()
 io.on('connection', (socket) => {
     global.chatSoket = socket;
     socket.on('add-user', (userId) => {
-        conlineUsers.set(userId, socket.id);
+        onlineUsers.set(userId, socket.id);
     })
     socket.on('send-msg', (data) => {
         const sendUserSocket = onlineUsers.get(data.to);

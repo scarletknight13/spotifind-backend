@@ -15,15 +15,21 @@ router.get('/', async (req, res) => {
         res.status(400).json(error);
     }
 })
-router.delete('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const user = await db.User.findById(req.body.userId);
-        const matches = user.matches;
-        const newMaatches = matches.filter(match => match != req.params.id);
-        await db.Match.findByIdAndDelete(req.params.id);
-        await db.User.findByIdAndUpdate(req.body.userId, {matches: newMaatches});          
+        console.log(req.body);
+        const Match = await db.Match.findByIdAndDelete(req.params.id);
+        const user1 = await db.User.findOne({username : req.body.user1.username});
+        const user2 = await db.User.findOne({username : req.body.user2.username});
+        const user1Matches = user1.matches;
+        const user2Matches = user2.matches;
+        const newMatches = user1Matches.filter(match => !match.equals(req.params.id));
+        const newMatches2 = user2Matches.filter(match => !match.equals(req.params.id));
+        await db.User.findByIdAndUpdate(user1._id, {matches: newMatches});  
+        await db.User.findByIdAndUpdate(user2._id, {matches: newMatches2});              
     } 
     catch (error) {
+        console.log(error);
         res.status(400).json(error);
     }
 })
@@ -61,7 +67,7 @@ router.get('/getmatches/:id', (req, res) => {
         }
     })
     .then((user) => {
-        const newData = []
+       const newData = []
        for(let i of user.matches){
             const newMessages = []
             for(let j of i.messages){
@@ -75,37 +81,38 @@ router.get('/getmatches/:id', (req, res) => {
         console.log(err);
         res.status(400).json(err)})
 })
-router.post('/new', async (req, res) => {
+
+router.put('/isMatch', async (req, res) => {
+    // try {
+    //     const likedUser = await db.User.findOne({username: req.body.likedUser});
+    //     const currentUser = await db.User.findOne({username: req.body.currentUser});
+    //     let flag = false;
+    //     // for(let i = 0; i < likedUserLikes.length; i++) {
+    //     //     console.log(typeof likedUserLikes[i], typeof currentUser._id)
+    //     //     if(currentUser._id.toString() == likedUserLikes[i].toString() ){
+    //     //         flag = true;
+    //     //     }
+    //     // }
+    //     if(flag){
+    //         const user1PastMatches = likedUser.matches
+    //         const user2PastMatches = currentUser.matches
+    //         const match = {
+    //             user1: likedUser._id,
+    //             user2: currentUser._id
+    //         }
+    //         const newMatch = await db.Match.create(match);
+    //         await db.User.findByIdAndUpdate(likedUser._id, {matches: [...user1PastMatches, newMatch._id]});
+    //         await db.User.findByIdAndUpdate(currentUser._id, {matches: [...user2PastMatches, newMatch._id]});
+    //     }
     try {
-        const user1 = await db.User.findOne({username: req.body.user1 }).populate('matches');
-        const user2 = await db.User.findOne({username: req.body.user2 }).populate('matches');
-        const user1PastMatches = user1.matches
-        const user2PastMatches = user2.matches
-        const match = {
-            user1: user1._id,
-            user2: user2._id
-        }
-        const newMatch = await db.Match.create(match);
-        await db.User.findByIdAndUpdate(user1._id, {matches: [...user1PastMatches, newMatch._id]})
-        await db.User.findByIdAndUpdate(user2._id, {matches: [...user2PastMatches, newMatch._id]})
-        res.json({message : 'Success'})
+        res.json({success : true});;
     } catch (error) {
-        console.log(error)
         res.status(400).json(error);
     }
-   
-})
-router.get('/isMatch', async (req, res) => {
-    try {
-        const likedUser = await db.User.findById(req.body.likedUser);
-        console.log(req.body)
-        const found = likedUser.likes.find(element => element.toString() == req.body.currentUserId.toString()
-        );
-        console.log(found);
-        res.json({response: found !== undefined});
-    } 
-    catch (error) {
-        res.status(400).json(error);
-    }
+    // } 
+    // catch (error) {
+    //     console.log(error);
+    //     res.status(400).json(error);
+    // }
 })
 module.exports = router;

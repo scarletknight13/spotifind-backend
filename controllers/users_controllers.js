@@ -8,7 +8,7 @@ const { User } = require('../models');
 
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, password, name } = req.body;
+    const { username, email, password, name, gender, age } = req.body;
     const usernameCheck = await User.findOne({ username });
     if (usernameCheck)
     return res.json({ msg: "Username already used", status: false });
@@ -21,8 +21,8 @@ router.post('/register', async (req, res) => {
           email,
           username,
           password: hashedPassword,
-          age: 19,
-          gender: 'Man',
+          age,
+          gender,
         });
         delete user.password;
         return res.json({ status: true, user });
@@ -57,9 +57,7 @@ router.put('/update', async (req, res) => {
       res.json({message: 'Failed to update user', error : error});
     }
 })
-router.post('/addtolikes', (req, res) => {
-    
-})
+
 router.get('/:id', async (req, res) => {
   try {
       console.log(req.params.id);
@@ -88,7 +86,7 @@ router.get('/:id', async (req, res) => {
             }
           }
         }
-        return amatches - bmatches;
+        return bmatches - amatches;
       });
       res.json(usersCopy);
   } catch (error) {
