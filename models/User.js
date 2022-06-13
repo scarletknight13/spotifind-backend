@@ -47,7 +47,16 @@ const UserSchema = new mongoose.Schema({
     }],
     playlist: [{
         type: Object,
-    }]
+    }],
+    preferences : {
+        type: Object,
+        default: {
+            ageMin : 18,
+            ageMax: 85,
+            gender: 'Woman',
+            distance: 'global',
+        }
+    }
 },
     {
         timestamps: true
